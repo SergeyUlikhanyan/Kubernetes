@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment-autoscaling
+  labels:
+    app: my-k8s-app
+    env: prod
+    owner: SergeyUlikhanyan
+spec:
+  selector:
+    matchLabels:
+      project: my-learn
+  template:
+    metadata:
+      labels:
+        project: my-learn
+    spec:
+      containers:
+        - name: my-learn-web
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v2beta1v1
+    kind: Deployment
+    name: my-deployment-autoscaling
+  minReplicas: 4
+  maxReplicas: 6
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 80   
+
+
+
+
+
+
+
+
+
+
+

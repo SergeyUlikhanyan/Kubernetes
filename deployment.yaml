@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    app: my-k8s-app
+    env: prod
+    owner: SergeyUlikhanyan
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: my-learn
+  template:
+    metadata:
+      labels:
+        project: my-learn
+    spec:
+      containers:
+        - name: my-learn-web
+          image: nginx:latest
+          ports:
+            - containerPort: 80

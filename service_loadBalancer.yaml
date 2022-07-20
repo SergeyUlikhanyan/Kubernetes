@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment-autoscaling
+  labels:
+    app: my-k8s-app
+    env: prod
+    owner: SergeyUlikhanyan
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: my-learn
+  template:
+    metadata:
+      labels:
+        project: my-learn
+    spec:
+      containers:
+        - name: my-learn-web
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-pod-service
+  labels:
+    env: prod
+    owner: SergeyUlikhanyan
+spec:
+  selector:
+    project: my-learn
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
